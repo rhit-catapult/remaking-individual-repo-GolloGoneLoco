@@ -2,43 +2,51 @@ import pygame
 import sys
 import random
 
+
 class Ball:
-    def __init__(self, screen, color, x, y, speed_x, speed_y, radius):
+    def __init__(self, screen, color, x, y, radius, speed_x, speed_y):
         self.screen = screen
         self.color = color
         self.x = x
-        self.y = y 
+        self.y = y
+        self.radius = radius
         self.speed_x = speed_x
         self.speed_y = speed_y
-        self.radius = radius
+
     def draw(self):
         pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.radius)
+
     def move(self):
+        # Move the ball
         self.x += self.speed_x
         self.y += self.speed_y
+
+        # Bounce off left/right walls
         if self.x - self.radius <= 0 or self.x + self.radius >= 300:
             self.speed_x *= -1
+
+        # Bounce off top/bottom walls
         if self.y - self.radius <= 0 or self.y + self.radius >= 300:
             self.speed_y *= -1
 
-        
+
 def main():
     pygame.init()
     screen = pygame.display.set_mode((300, 300))
     pygame.display.set_caption('Bouncing Ball')
-    screen.fill(pygame.Color('gray'))
     clock = pygame.time.Clock()
 
-    # TODO: Create an instance of the Ball class called ball1
+    # Create a ball
     ball1 = Ball(
         screen,
-        pygame.Color(random.randint(0,255),random.randint(0,255),random.randint(0,255)),
-        x = 150,
-        y = 150,
-        radius = 20,
-        speed_x = random.randint(5,25),
-        speed_y = random.randint(5,25)
-        )
+        pygame.Color('red'),
+        x=150,
+        y=150,
+        radius=20,
+        speed_x=3,
+        speed_y=2
+    )
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -47,18 +55,10 @@ def main():
         clock.tick(60)
         screen.fill(pygame.Color('gray'))
 
-        ball1.draw()
         ball1.move()
+        ball1.draw()
+
         pygame.display.update()
 
 
 main()
-
-
-# Optional challenges (if you finish and want do play a bit more):
-#   After you get 1 ball working make a few balls (ball2, ball3, etc) that start in different places.
-#   Make each ball a different color
-#   Make the screen 1000 x 800 to allow your balls more space (what needs to change?)
-#   Make the speed of each ball randomly chosen (1 to 5)
-#   After you get that working try making a list of balls to have 100 balls (use a loop)!
-#   Use random colors for each ball
